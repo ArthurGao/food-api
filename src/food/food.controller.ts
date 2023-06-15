@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { CreateFoodDto } from './dto/create-food.dto';
+import { FoodDto } from './dto/food.dto';
 
 @Controller('food')
 export class FoodController {

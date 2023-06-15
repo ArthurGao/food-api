@@ -1,16 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFoodDto } from '../dto/create-food.dto';
+import { FoodDto } from '../dto/food.dto';
+import { FoodMapper } from '../mapper/food.mapper';
+import { Food } from '../entity/food.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export default class FoodService {
-  private foodItems: CreateFoodDto[] = [];
+  private foodItems: FoodDto[] = [];
+  constructor(
+    @InjectRepository(Food)
+    private readonly foodRepository: Repository<Food>,
+    private readonly foodMapper: FoodMapper,
+  ) {}
 
-  createFoodItem(createFoodDto: CreateFoodDto): void {
+  createFoodItem(foodDto: FoodDto): void {
     // Logic to create a new food item
-    this.foodItems.push(createFoodDto);
+    const foodEntity: Food = this.foodMapper.toEntity(foodDto);
+   // const foodRepository = TypeOrmModule.getRepository(Food);
+
+    this.foodItems.push(foodDto);
   }
 
-  getAllFoodItems(): CreateFoodDto[] {
+  getAllFoodItems(): FoodDto[] {
     // Logic to retrieve and return all food items
     return this.foodItems;
   }
@@ -19,7 +32,7 @@ export default class FoodService {
     title: string,
     description: string,
     quantity: number,
-  ): CreateFoodDto[] {
+  ): FoodDto[] {
     // Logic to search food items based on the provided parameters
     // Return the matching food items
     return this.foodItems.filter((foodItem) => {
@@ -31,8 +44,11 @@ export default class FoodService {
     });
   }
 
-  getFoodItemById(id: string): CreateFoodDto {
-    // Logic to retrieve and return a specific food item by ID
-    return this.foodItems.find((foodItem) => foodItem.id === id);
+  async getFoodItemById(id: string): Promise<FoodDto | undefined> {
+    const options = {
+      where: { id }, // Specify the ID as part of the where clause
+    };
+    const food = await this.foodRepository.findOne(options);
+    return food;
   }
 }

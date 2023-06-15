@@ -1,4 +1,4 @@
-export class CreateFoodDto {
+export class FoodDto {
   title: string;
   description: string;
   price: number;
