@@ -10,12 +10,16 @@ exports.FoodModule = void 0;
 const common_1 = require("@nestjs/common");
 const food_controller_1 = require("./food.controller");
 const food_service_1 = require("./services/food.service");
+const food_entity_1 = require("./entities/food.entity");
+const typeorm_1 = require("@nestjs/typeorm");
+const food_mapper_1 = require("./mapper/food.mapper");
 let FoodModule = exports.FoodModule = class FoodModule {
 };
 exports.FoodModule = FoodModule = __decorate([
     (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([food_entity_1.Food])],
         controllers: [food_controller_1.FoodController],
-        providers: [food_service_1.default],
+        providers: [food_service_1.default, food_mapper_1.FoodMapper],
     })
 ], FoodModule);
 //# sourceMappingURL=food.module.js.map

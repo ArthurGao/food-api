@@ -11,8 +11,7 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const food_module_1 = require("./food/food.module");
-const food_service_1 = require("./food/services/food.service");
-const food_entity_1 = require("./food/entity/food.entity");
+const food_entity_1 = require("./food/entities/food.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 let AppModule = exports.AppModule = class AppModule {
 };
@@ -32,7 +31,7 @@ exports.AppModule = AppModule = __decorate([
             food_module_1.FoodModule,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, food_service_1.default],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

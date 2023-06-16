@@ -1,6 +1,6 @@
 import { FoodMapper } from './food.mapper';
 import { FoodDto } from '../dto/food.dto';
-import { Food } from '../entity/food.entity';
+import { Food } from '../entities/food.entity';
 
 describe('FoodMapper', () => {
   let foodMapper: FoodMapper;

@@ -14,15 +14,24 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FoodController = void 0;
 const common_1 = require("@nestjs/common");
+const food_dto_1 = require("./dto/food.dto");
+const food_service_1 = require("./services/food.service");
 let FoodController = exports.FoodController = class FoodController {
+    constructor(foodService) {
+        this.foodService = foodService;
+    }
     getAllFoodItems() {
-        return { message: 'List of all food items' };
+        return this.foodService.getAllFoodItems();
     }
     searchFoodItems(title, description, quantity) {
         return { message: 'Search results' };
     }
     getFoodItemById(id) {
-        return { message: `Food item with ID ${id}` };
+        return this.foodService.getFoodItemById(id);
+    }
+    async createFoodItem(foodDto) {
+        const id = await this.foodService.createFoodItem(foodDto);
+        return { id };
     }
     buyFoodItem(id, quantity) {
         return { message: `Bought food item with ID ${id}` };
@@ -51,6 +60,13 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], FoodController.prototype, "getFoodItemById", null);
 __decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [food_dto_1.FoodDto]),
+    __metadata("design:returntype", Promise)
+], FoodController.prototype, "createFoodItem", null);
+__decorate([
     (0, common_1.Post)('buy/:id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)('quantity')),
@@ -59,6 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], FoodController.prototype, "buyFoodItem", null);
 exports.FoodController = FoodController = __decorate([
-    (0, common_1.Controller)('food')
+    (0, common_1.Controller)('food'),
+    __metadata("design:paramtypes", [food_service_1.default])
 ], FoodController);
 //# sourceMappingURL=food.controller.js.map

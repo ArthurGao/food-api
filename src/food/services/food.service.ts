@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FoodDto } from '../dto/food.dto';
 import { FoodMapper } from '../mapper/food.mapper';
-import { Food } from '../entity/food.entity';
-import { Injectable } from '@nestjs/common';
+import { Food } from '../entities/food.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -15,17 +14,21 @@ export default class FoodService {
     private readonly foodMapper: FoodMapper,
   ) {}
 
-  createFoodItem(foodDto: FoodDto): void {
+  async createFoodItem(foodDto: FoodDto): Promise<string> {
     // Logic to create a new food item
     const foodEntity: Food = this.foodMapper.toEntity(foodDto);
-   // const foodRepository = TypeOrmModule.getRepository(Food);
-
-    this.foodItems.push(foodDto);
+    const savedFoodEntity = await this.foodRepository.save(foodEntity);
+    return savedFoodEntity.id;
   }
 
-  getAllFoodItems(): FoodDto[] {
-    // Logic to retrieve and return all food items
-    return this.foodItems;
+  async getAllFoodItems(): Promise<FoodDto[]> {
+    // Use the find method of the repository to retrieve all records
+    const foodEntities = await this.foodRepository.find();
+    // Use the FoodMapper to convert each Food entity to a FoodDto
+    const foodDtos = foodEntities.map((foodEntity) =>
+      this.foodMapper.toDto(foodEntity),
+    );
+    return foodDtos;
   }
 
   searchFoodItems(

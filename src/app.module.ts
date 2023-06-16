@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { FoodModule } from './food/food.module';
 import { FoodController } from './food/food.controller';
 import FoodService from './food/services/food.service';
-import { Food } from './food/entity/food.entity';
+import { Food } from './food/entities/food.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -22,6 +22,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     FoodModule,
   ],
   controllers: [AppController],
-  providers: [AppService, FoodService],
+  providers: [AppService],
 })
 export class AppModule {}
