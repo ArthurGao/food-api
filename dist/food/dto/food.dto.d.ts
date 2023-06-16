@@ -3,5 +3,6 @@ export declare class FoodDto {
     description: string;
     price: number;
     quantity: number;
+    createdDate: Date;
     id: string;
 }

@@ -5,5 +5,6 @@ CREATE TABLE food (
     title VARCHAR(255) UNIQUE NOT NULL,
     description VARCHAR(255),
     price DECIMAL(10, 2),
-    quantity INT
+    quantity INT,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

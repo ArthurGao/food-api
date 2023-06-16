@@ -16,64 +16,113 @@ exports.FoodController = void 0;
 const common_1 = require("@nestjs/common");
 const food_dto_1 = require("./dto/food.dto");
 const food_service_1 = require("./services/food.service");
+const perform_action_dto_1 = require("./dto/perform.action.dto");
+const class_validator_1 = require("class-validator");
+const handle_errors_1 = require("./exceptions/handle.errors");
 let FoodController = exports.FoodController = class FoodController {
     constructor(foodService) {
         this.foodService = foodService;
     }
-    getAllFoodItems() {
-        return this.foodService.getAllFoodItems();
+    getAllOrSearchFoodItems(title, description, quantity, sortBy, sortOrder) {
+        this.validateSort(sortBy, sortOrder);
+        if (title || description || quantity) {
+            return this.searchFoodItems(title, description, quantity, sortBy, sortOrder);
+        }
+        else {
+            return this.getAllFoodItems(sortBy, sortOrder);
+        }
     }
-    searchFoodItems(title, description, quantity) {
-        return { message: 'Search results' };
+    getAllFoodItems(sortBy, sortOrder) {
+        return this.foodService.getAllFoodItems(sortBy, sortOrder);
+    }
+    searchFoodItems(title, description, quantity, sortBy, sortOrder) {
+        return this.foodService.searchFoodItems(title, description, quantity, sortBy, sortOrder);
     }
     getFoodItemById(id) {
         return this.foodService.getFoodItemById(id);
     }
     async createFoodItem(foodDto) {
+        const validationErrors = await (0, class_validator_1.validate)(foodDto);
+        if (validationErrors.length > 0) {
+            throw new common_1.HttpException({ message: 'Validation failed', errors: validationErrors }, common_1.HttpStatus.BAD_REQUEST);
+        }
         const id = await this.foodService.createFoodItem(foodDto);
         return { id };
     }
-    buyFoodItem(id, quantity) {
-        return { message: `Bought food item with ID ${id}` };
+    async performFoodAction(id, actionPayload) {
+        const validationErrors = await (0, class_validator_1.validate)(actionPayload);
+        if (validationErrors.length > 0) {
+            throw new common_1.HttpException({ message: 'Validation failed', errors: validationErrors }, common_1.HttpStatus.BAD_REQUEST);
+        }
+        const { action, quantity } = actionPayload;
+        if (action === 'buy') {
+            return this.foodService.buyFoodItem(id, quantity);
+        }
+        else if (action === 'replenish') {
+            throw new common_1.BadRequestException('Not implemented');
+        }
+        else {
+            throw new common_1.BadRequestException('Invalid action');
+        }
+    }
+    validateSort(sortBy, sortOrder) {
+        if (sortBy && !['createdDate', 'price'].includes(sortBy)) {
+            throw new common_1.BadRequestException('Invalid sortBy value. Only "createdDate" and "price" are allowed.');
+        }
+        if (sortOrder &&
+            sortOrder.toUpperCase() !== 'ASC' &&
+            sortOrder.toUpperCase() !== 'DESC') {
+            throw new common_1.BadRequestException('Invalid sortOrder value. Only "ASC", "asc" and "DESC", "desc" are allowed.');
+        }
     }
 };
 __decorate([
     (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], FoodController.prototype, "getAllFoodItems", null);
-__decorate([
-    (0, common_1.Get)('search'),
+    handle_errors_1.handleErrors,
     __param(0, (0, common_1.Query)('title')),
     __param(1, (0, common_1.Query)('description')),
     __param(2, (0, common_1.Query)('quantity')),
+    __param(3, (0, common_1.Query)('sortBy')),
+    __param(4, (0, common_1.Query)('sortOrder')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Number]),
+    __metadata("design:paramtypes", [String, String, Number, String, String]),
+    __metadata("design:returntype", void 0)
+], FoodController.prototype, "getAllOrSearchFoodItems", null);
+__decorate([
+    __param(0, (0, common_1.Query)('title')),
+    __param(1, (0, common_1.Query)('description')),
+    __param(2, (0, common_1.Query)('quantity')),
+    __param(3, (0, common_1.Query)('sortBy')),
+    __param(4, (0, common_1.Query)('sortOrder')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Number, String, String]),
     __metadata("design:returntype", void 0)
 ], FoodController.prototype, "searchFoodItems", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    handle_errors_1.handleErrors,
+    __param(0, (0, common_1.Param)('id', new common_1.ValidationPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], FoodController.prototype, "getFoodItemById", null);
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    handle_errors_1.handleErrors,
+    __param(0, (0, common_1.Body)(new common_1.ValidationPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [food_dto_1.FoodDto]),
     __metadata("design:returntype", Promise)
 ], FoodController.prototype, "createFoodItem", null);
 __decorate([
-    (0, common_1.Post)('buy/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)('quantity')),
+    (0, common_1.Patch)(':id'),
+    handle_errors_1.handleErrors,
+    __param(0, (0, common_1.Param)('id', new common_1.ValidationPipe())),
+    __param(1, (0, common_1.Body)(new common_1.ValidationPipe())),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number]),
-    __metadata("design:returntype", void 0)
-], FoodController.prototype, "buyFoodItem", null);
+    __metadata("design:paramtypes", [String, perform_action_dto_1.PerformFoodActionDto]),
+    __metadata("design:returntype", Promise)
+], FoodController.prototype, "performFoodAction", null);
 exports.FoodController = FoodController = __decorate([
     (0, common_1.Controller)('food'),
     __metadata("design:paramtypes", [food_service_1.default])

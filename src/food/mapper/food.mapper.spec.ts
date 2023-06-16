@@ -17,6 +17,7 @@ describe('FoodMapper', () => {
         price: 9.99,
         quantity: 10,
         id: '1',
+        createdDate: new Date(),
       };
 
       const foodEntity: Food = foodMapper.toEntity(foodDto);

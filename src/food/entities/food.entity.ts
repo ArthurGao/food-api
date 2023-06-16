@@ -17,4 +17,11 @@ export class Food {
 
   @Column()
   quantity: number;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdDate: Date;
 }

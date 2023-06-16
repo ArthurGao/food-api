@@ -33,6 +33,14 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Food.prototype, "quantity", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'timestamp',
+        nullable: true,
+        default: () => 'CURRENT_TIMESTAMP',
+    }),
+    __metadata("design:type", Date)
+], Food.prototype, "createdDate", void 0);
 exports.Food = Food = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.Unique)(['id', 'title'])

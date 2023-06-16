@@ -8,7 +8,9 @@ export default class FoodService {
     private foodItems;
     constructor(foodRepository: Repository<Food>, foodMapper: FoodMapper);
     createFoodItem(foodDto: FoodDto): Promise<string>;
-    getAllFoodItems(): Promise<FoodDto[]>;
-    searchFoodItems(title: string, description: string, quantity: number): FoodDto[];
+    getAllFoodItems(sortBy?: string, sortOrder?: 'ASC' | 'DESC'): Promise<FoodDto[]>;
+    searchFoodItems(title?: string, description?: string, quantity?: number, sortBy?: string, sortOrder?: 'ASC' | 'DESC'): Promise<FoodDto[]>;
     getFoodItemById(id: string): Promise<FoodDto | undefined>;
+    buyFoodItem(id: string, quantity: number): Promise<void>;
+    private getSortingOrder;
 }

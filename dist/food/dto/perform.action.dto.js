@@ -9,32 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Food = void 0;
-const typeorm_1 = require("typeorm");
-let Food = exports.Food = class Food {
-};
+exports.PerformFoodActionDto = void 0;
+const class_validator_1 = require("class-validator");
+class PerformFoodActionDto {
+}
+exports.PerformFoodActionDto = PerformFoodActionDto;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], Food.prototype, "id", void 0);
+], PerformFoodActionDto.prototype, "action", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: false }),
-    __metadata("design:type", String)
-], Food.prototype, "title", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Food.prototype, "description", void 0);
-__decorate([
-    (0, typeorm_1.Column)('decimal', { precision: 10, scale: 2 }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], Food.prototype, "price", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Food.prototype, "quantity", void 0);
-exports.Food = Food = __decorate([
-    (0, typeorm_1.Entity)(),
-    (0, typeorm_1.Unique)(['id', 'title'])
-], Food);
-//# sourceMappingURL=food.entity.js.map
+], PerformFoodActionDto.prototype, "quantity", void 0);
+//# sourceMappingURL=perform.action.dto.js.map

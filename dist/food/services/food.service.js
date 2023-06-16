@@ -24,28 +24,83 @@ let FoodService = class FoodService {
         this.foodItems = [];
     }
     async createFoodItem(foodDto) {
+        if (!foodDto) {
+            throw new Error('Invalid food data. FoodDto cannot be null.');
+        }
         const foodEntity = this.foodMapper.toEntity(foodDto);
         const savedFoodEntity = await this.foodRepository.save(foodEntity);
         return savedFoodEntity.id;
     }
-    async getAllFoodItems() {
-        const foodEntities = await this.foodRepository.find();
+    async getAllFoodItems(sortBy, sortOrder) {
+        const findOptions = {
+            order: this.getSortingOrder(sortBy, sortOrder),
+        };
+        const foodEntities = await this.foodRepository.find(findOptions);
         const foodDtos = foodEntities.map((foodEntity) => this.foodMapper.toDto(foodEntity));
         return foodDtos;
     }
-    searchFoodItems(title, description, quantity) {
-        return this.foodItems.filter((foodItem) => {
-            return (foodItem.title.includes(title) ||
-                foodItem.description.includes(description) ||
-                foodItem.quantity === quantity);
-        });
+    async searchFoodItems(title, description, quantity, sortBy, sortOrder) {
+        if (!title && !description && !quantity) {
+            throw new Error('At least one of title, description, or quantity must be provided.');
+        }
+        const queryBuilder = this.foodRepository.createQueryBuilder('food');
+        if (title) {
+            queryBuilder.andWhere('food.title LIKE :title', { title: `%${title}%` });
+        }
+        if (description) {
+            queryBuilder.andWhere('food.description LIKE :description', {
+                description: `%${description}%`,
+            });
+        }
+        if (quantity) {
+            queryBuilder.andWhere('food.quantity >= :quantity', { quantity });
+        }
+        if (sortBy === 'createdDate') {
+            queryBuilder.orderBy('food.createdDate', sortOrder);
+        }
+        else if (sortBy === 'price') {
+            queryBuilder.orderBy('food.price', sortOrder);
+        }
+        const foodEntities = await queryBuilder.getMany();
+        const foodDtos = foodEntities.map((foodEntity) => this.foodMapper.toDto(foodEntity));
+        return foodDtos;
     }
     async getFoodItemById(id) {
+        if (!id) {
+            throw new Error('Invalid ID. ID must be provided.');
+        }
         const options = {
             where: { id },
         };
         const food = await this.foodRepository.findOne(options);
         return food;
+    }
+    async buyFoodItem(id, quantity) {
+        if (!id) {
+            throw new Error('Invalid ID. ID must be provided.');
+        }
+        if (quantity === 0) {
+            throw new Error('Invalid quantity. Quantity must be greater than 0.');
+        }
+        const food = await this.getFoodItemById(id);
+        if (food) {
+            if (food.quantity === 0) {
+                throw new Error('Food item is out of stock.');
+            }
+            food.quantity -= quantity;
+            await this.foodRepository.save(food);
+        }
+    }
+    getSortingOrder(sortBy, sortOrder) {
+        const sortingOrder = {};
+        if (sortBy === 'createdDate') {
+            sortingOrder.createdDate =
+                sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+        }
+        else if (sortBy === 'price') {
+            sortingOrder.price = sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+        }
+        return sortingOrder;
     }
 };
 FoodService = __decorate([
