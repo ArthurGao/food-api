@@ -30,7 +30,7 @@ The Food API should now be running at http://localhost:3000.
 
 3. API Documentation
 The API documentation is generated using Swagger. You can access it at http://localhost:3000/api once the application is running.
-![Alt Text](swagger.jpg)
+![Alt Text](image/swagger.jpg)
 
 4. Endpoints
 The API provides the following endpoints:
@@ -43,6 +43,8 @@ The API provides the following endpoints:
   ``` curl  
     curl --location 'localhost:3000/food?sortBy=price&sortOrder=asc'
   ```  
+![Alt Text](image/get_foods.jpg)
+
 - Retrieve a list of food items by given title/description/price/quantity sorted by created_date/price in acending/descending order.
   ```
     GET /food?title=apple&sortBy=price&sortOrder=asc
@@ -51,6 +53,8 @@ The API provides the following endpoints:
   ``` curl  
     curl --location 'localhost:3000/food?title=Dominion%20Pizza'
   ```  
+![Alt Text](image/search_food.jpg)
+
 - Retrieve a specific food item by ID.
   ```
     GET /food/:id 
@@ -58,6 +62,8 @@ The API provides the following endpoints:
   ``` curl  
     curl --location 'localhost:3000/food/f999acdb-6b1a-4be9-9e29-ad16b067bf04'
   ```
+![Alt Text](image/get_food_by_id.jpg)
+
 - Create a new food item.
   ```
     POST /food
@@ -72,6 +78,8 @@ The API provides the following endpoints:
       "quantity": 25
     }'
   ```
+![Alt Text](image/create_food.jpg)
+
 - Buy a food item (reduces the quantity of that food item by the number purchased)
   ```
     PATCH /food/:id
@@ -84,6 +92,7 @@ The API provides the following endpoints:
       "quantity": 1
     }'
   ```
+![Alt Text](image/buy_food.jpg)
 
 Not implemented yet:
 - Replenishment a food item (increases the quantity of that food item by the number purchased)
