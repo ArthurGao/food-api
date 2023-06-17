@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FoodModule } from './food/food.module';
-import { FoodController } from './food/food.controller';
-import FoodService from './food/services/food.service';
 import { Food } from './food/entities/food.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -11,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'postgres',
       port: 5432,
       username: 'postgres',
       password: 'mysecretpassword',

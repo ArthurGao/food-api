@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Unique, Index } from 'typeorm';
 
 @Entity()
-@Unique(['id', 'title'])
+@Index('UQ_Title', ['title'], { unique: true })
 export class Food {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -19,6 +19,7 @@ export class Food {
   quantity: number;
 
   @Column({
+    name: 'created_date',
     type: 'timestamp',
     nullable: true,
     default: () => 'CURRENT_TIMESTAMP',

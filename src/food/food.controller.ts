@@ -16,8 +16,19 @@ import FoodService from './services/food.service';
 import { PerformFoodActionDto } from './dto/perform.action.dto';
 import { validate } from 'class-validator';
 import { handleErrors } from './exceptions/handle.errors';
+import {
+  ApiBody,
+  ApiQuery,
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiForbiddenResponse,
+  ApiUnprocessableEntityResponse,
+  ApiCreatedResponse,
+} from '@nestjs/swagger';
 
 @Controller('food')
+@ApiTags('Food')
 export class FoodController {
   constructor(private readonly foodService: FoodService) {}
 

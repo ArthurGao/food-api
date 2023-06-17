@@ -90,6 +90,9 @@ let FoodService = class FoodService {
             food.quantity -= quantity;
             await this.foodRepository.save(food);
         }
+        else {
+            throw new Error('Food item not found.');
+        }
     }
     getSortingOrder(sortBy, sortOrder) {
         const sortingOrder = {};

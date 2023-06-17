@@ -17,9 +17,9 @@ export class FoodDto {
   @IsNumber()
   quantity: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   createdDate: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   id: string;
 }
