@@ -6,6 +6,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -14,7 +15,7 @@ import {
 import { FoodDto } from './dto/food.dto';
 import FoodService from './services/food.service';
 import { PerformFoodActionDto } from './dto/perform.action.dto';
-import { validate } from 'class-validator';
+import { IsUUID, validate } from 'class-validator';
 import { handleErrors } from './exceptions/handle.errors';
 import {
   ApiBody,
@@ -25,6 +26,7 @@ import {
   ApiForbiddenResponse,
   ApiUnprocessableEntityResponse,
   ApiCreatedResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 
 @Controller('food')
@@ -33,6 +35,21 @@ export class FoodController {
   constructor(private readonly foodService: FoodService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Get all food items(no criteria) or search by criteria',
+  })
+  @ApiQuery({ name: 'title', type: 'string', required: false })
+  @ApiQuery({ name: 'description', type: 'string', required: false })
+  @ApiQuery({ name: 'quantity', type: 'number', required: false })
+  @ApiQuery({ name: 'sortBy', type: 'string', required: false })
+  @ApiQuery({ name: 'sortOrder', enum: ['ASC', 'DESC'], required: false })
+  @ApiResponse({
+    status: 200,
+    description: 'Array of food items',
+    type: FoodDto,
+    isArray: true,
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @handleErrors
   getAllOrSearchFoodItems(
     @Query('title') title: string,
@@ -82,14 +99,30 @@ export class FoodController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get a food item by ID' })
+  @ApiParam({ name: 'id', type: 'string', description: 'ID of the food item' })
+  @ApiResponse({ status: 200, description: 'The food item', type: FoodDto })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation failed (uuid is expected)',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   @handleErrors
-  getFoodItemById(@Param('id', new ValidationPipe()) id: string) {
+  getFoodItemById(@Param('id', new ParseUUIDPipe()) id: string) {
     // Logic to retrieve and return a specific food item by ID
     // Return the food item or an appropriate response
     return this.foodService.getFoodItemById(id);
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create a new food item' })
+  @ApiBody({ type: FoodDto })
+  @ApiResponse({
+    status: 201,
+    description: 'The food item has been successfully created',
+    type: String,
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
   @handleErrors
   async createFoodItem(
     @Body(new ValidationPipe()) foodDto: FoodDto,
@@ -106,6 +139,11 @@ export class FoodController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Perform an action on a food item' })
+  @ApiParam({ name: 'id', type: 'string', description: 'ID of the food item' })
+  @ApiBody({ type: PerformFoodActionDto })
+  @ApiResponse({ status: 200, description: 'Action performed successfully' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
   @handleErrors
   async performFoodAction(
     @Param('id', new ValidationPipe()) id: string,

@@ -30,6 +30,7 @@ The Food API should now be running at http://localhost:3000.
 
 3. API Documentation
 The API documentation is generated using Swagger. You can access it at http://localhost:3000/api once the application is running.
+![Alt Text](swagger.jpg)
 
 4. Endpoints
 The API provides the following endpoints:
@@ -84,3 +85,16 @@ The API provides the following endpoints:
     }'
   ```
 
+Not implemented yet:
+- Replenishment a food item (increases the quantity of that food item by the number purchased)
+    ```
+    PATCH /food/:id
+  ```
+  ``` curl  
+    curl --location --request PATCH 'localhost:3000/food/f999acdb-6b1a-4be9-9e29-ad16b067bf04' \
+    --header 'Content-Type: application/json' \
+    --data '{
+      "action": "replenishment",
+      "quantity": 1
+    }'
+  ```

@@ -39,6 +39,7 @@ __decorate([
 ], Food.prototype, "quantity", void 0);
 __decorate([
     (0, typeorm_1.Column)({
+        name: 'created_date',
         type: 'timestamp',
         nullable: true,
         default: () => 'CURRENT_TIMESTAMP',
@@ -47,6 +48,6 @@ __decorate([
 ], Food.prototype, "createdDate", void 0);
 exports.Food = Food = __decorate([
     (0, typeorm_1.Entity)(),
-    (0, typeorm_1.Unique)(['id', 'title'])
+    (0, typeorm_1.Index)('UQ_Title', ['title'], { unique: true })
 ], Food);
 //# sourceMappingURL=food.entity.js.map

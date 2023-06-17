@@ -80,22 +80,22 @@ let FoodController = exports.FoodController = class FoodController {
 };
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get all food items(no criteria) or search by criteria',
+    }),
+    (0, swagger_1.ApiQuery)({ name: 'title', type: 'string', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'description', type: 'string', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'quantity', type: 'number', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'sortBy', type: 'string', required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'sortOrder', enum: ['ASC', 'DESC'], required: false }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Array of food items',
+        type: food_dto_1.FoodDto,
+        isArray: true,
+    }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Internal server error' }),
     handle_errors_1.handleErrors,
-    (0, swagger_1.ApiQuery)({ name: 'title', type: String, required: false }),
-    (0, swagger_1.ApiQuery)({ name: 'description', type: String, required: false }),
-    (0, swagger_1.ApiQuery)({ name: 'quantity', type: Number, required: false }),
-    (0, swagger_1.ApiQuery)({
-        name: 'sortBy',
-        type: String,
-        enum: ['createdDate', 'price'],
-        required: false,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'sortOrder',
-        type: String,
-        enum: ['ASC', 'DESC'],
-        required: false,
-    }),
     openapi.ApiResponse({ status: 200, type: [require("./dto/food.dto").FoodDto] }),
     __param(0, (0, common_1.Query)('title')),
     __param(1, (0, common_1.Query)('description')),
@@ -118,15 +118,31 @@ __decorate([
 ], FoodController.prototype, "searchFoodItems", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get a food item by ID' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: 'string', description: 'ID of the food item' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'The food item', type: food_dto_1.FoodDto }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Validation failed (uuid is expected)',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Internal server error' }),
     handle_errors_1.handleErrors,
     openapi.ApiResponse({ status: 200, type: require("./dto/food.dto").FoodDto }),
-    __param(0, (0, common_1.Param)('id', new common_1.ValidationPipe())),
+    __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], FoodController.prototype, "getFoodItemById", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new food item' }),
+    (0, swagger_1.ApiBody)({ type: food_dto_1.FoodDto }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'The food item has been successfully created',
+        type: String,
+    }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
     handle_errors_1.handleErrors,
     openapi.ApiResponse({ status: 201 }),
     __param(0, (0, common_1.Body)(new common_1.ValidationPipe())),
@@ -136,6 +152,11 @@ __decorate([
 ], FoodController.prototype, "createFoodItem", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Perform an action on a food item' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: 'string', description: 'ID of the food item' }),
+    (0, swagger_1.ApiBody)({ type: perform_action_dto_1.PerformFoodActionDto }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Action performed successfully' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
     handle_errors_1.handleErrors,
     openapi.ApiResponse({ status: 200 }),
     __param(0, (0, common_1.Param)('id', new common_1.ValidationPipe())),
