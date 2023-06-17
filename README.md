@@ -19,7 +19,23 @@ NestJs, PostgreSQL, Docker, TypeORM, Swagger
   ```bash
     git clone https://github.com/arthur-gao/food-api.git
   ```
-2. Start Docker container:
+
+2. Test the application:
+
+  ```bash
+    npm run test
+  ``` 
+  ```
+    PASS  src/app.controller.spec.ts
+    PASS  src/food/mapper/food.mapper.spec.ts
+    PASS  src/food/services/food.service.spec.ts
+
+    Test Suites: 3 passed, 3 total
+    Tests:       15 passed, 15 total
+    Snapshots:   0 total
+  ```
+
+3. Start Docker container:
 
    ```bash
     cd food-api
@@ -28,11 +44,12 @@ NestJs, PostgreSQL, Docker, TypeORM, Swagger
 
 The Food API should now be running at http://localhost:3000.
 
-3. API Documentation
-The API documentation is generated using Swagger. You can access it at http://localhost:3000/api once the application is running.
-![Alt Text](image/swagger.jpg)
 
-4. Endpoints
+4. API Documentation
+The API documentation is generated using Swagger. You can access it at http://localhost:3000/api once the application is running.
+![Alt Text](swagger.jpg)
+
+5. Endpoints
 The API provides the following endpoints:
 
 - Retrieve a list of all food items sorted by created_date/price in acending/descending order.
