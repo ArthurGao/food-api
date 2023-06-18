@@ -25,3 +25,14 @@ services:
       - 3000:3000
     depends_on:
       - db
+  
+  locust:
+    image: locustio/locust:latest
+    command: -f /mnt/locustfile.py --host http://app:3000 --headless -u 10 -r 2 -t 30s --html=/mnt/locust_reports/locust_report.html
+    profiles:
+      - load-testing
+    volumes:
+      - ./locust/performance-test.py:/mnt/locustfile.py
+      - ./locust_reports:/mnt/locust_reports
+    ports:
+      - 8089:8089

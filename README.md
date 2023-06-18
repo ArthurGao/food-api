@@ -139,3 +139,10 @@ Not implemented yet:
     "quantity": 1
   }'
   ```
+6. Performance and loading test
+   Add a performance test using Python Locust, it can be run by:
+    ```bash
+    docker-compose --profile load-testing up
+    ```
+  After *30 seconds*, there is a locust_report.html created inside folder locust_reports in your host.
+  ![Alt Text](image/reports.jpg)
