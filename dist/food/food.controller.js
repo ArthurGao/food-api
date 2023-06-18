@@ -159,7 +159,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request' }),
     handle_errors_1.handleErrors,
     openapi.ApiResponse({ status: 200 }),
-    __param(0, (0, common_1.Param)('id', new common_1.ValidationPipe())),
+    __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),
     __param(1, (0, common_1.Body)(new common_1.ValidationPipe())),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, perform_action_dto_1.PerformFoodActionDto]),

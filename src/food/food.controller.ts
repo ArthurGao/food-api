@@ -15,7 +15,7 @@ import {
 import { FoodDto } from './dto/food.dto';
 import FoodService from './services/food.service';
 import { PerformFoodActionDto } from './dto/perform.action.dto';
-import { IsUUID, validate } from 'class-validator';
+import { validate } from 'class-validator';
 import { handleErrors } from './exceptions/handle.errors';
 import {
   ApiBody,
@@ -23,9 +23,6 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
-  ApiForbiddenResponse,
-  ApiUnprocessableEntityResponse,
-  ApiCreatedResponse,
   ApiParam,
 } from '@nestjs/swagger';
 
@@ -146,7 +143,7 @@ export class FoodController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   @handleErrors
   async performFoodAction(
-    @Param('id', new ValidationPipe()) id: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
     @Body(new ValidationPipe()) actionPayload: PerformFoodActionDto,
   ) {
     const validationErrors = await validate(actionPayload);

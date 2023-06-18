@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const environment_1 = require("./environments/environment");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const food_module_1 = require("./food/food.module");
@@ -21,7 +22,7 @@ exports.AppModule = AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',
                 host: 'localhost',
-                port: 5432,
+                port: environment_1.environment.dbPort,
                 username: 'postgres',
                 password: 'mysecretpassword',
                 database: 'postgres',
