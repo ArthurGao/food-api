@@ -49,28 +49,24 @@ NestJs, PostgreSQL, Docker, TypeORM, Swagger
     Time:        3.148 s
     ```
     *Note*: Only wrtie one e2e test case for demo purpose, more e2e test cases can be added in the future.
-    It is:
-    - 1). Create a food item
-    - 2). Get food item by id
-    - 3). Get all food items
-    - 4). Buy one food item and validate the quantity is reduced by quantity purchased 
+    It contains 4 steps:
+    - Create a food item
+    - Get food item by id
+    - Get all food items
+    - Buy one food item and validate the quantity is reduced by quantity purchased 
 
 3. Start Docker container:
    ```bash
-  cd food-api
-  docker-compose up --build
+   docker-compose up --build
    ```
-
 The Food API should now be running at http://localhost:3000.
-
 
 4. API Documentation
 The API documentation is generated using Swagger. You can access it at http://localhost:3000/api once the application is running.
-![Alt Text](swagger.jpg)
+![Alt Text](image/swagger.jpg)
 
 5. Endpoints
 The API provides the following endpoints:
-
 - Retrieve a list of all food items sorted by created_date/price in acending/descending order.
   ```
   GET /food
